@@ -1,0 +1,29 @@
+.carousel-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: black;
+    color: black;
+    z-index: 1;
+}
+
+.carousel-image {
+    position: relative;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 50px;
+    right: 70px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+
+}
+
+.image-text {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
