@@ -1,23 +1,17 @@
-import React, { useState, useEffect, Route } from 'react';
-import {
-  Box, Typography, MenuItem, Button, Menu
-
-} from '@mui/material';
-import './App.css';
-import { Link } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import MailIcon from '@mui/icons-material/Mail';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { SocialIcon } from 'react-social-icons';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import AddIcCallIcon from "@mui/icons-material/AddIcCall";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import CloseIcon from "@mui/icons-material/Close";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
-
-
-
+import React, { Route, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { SocialIcon } from "react-social-icons";
+import "./App.css";
 const paddingBox = { px: { xs: 2, xl: 38 } };
 
 export default function BootAppBar() {
@@ -26,57 +20,54 @@ export default function BootAppBar() {
   useEffect(() => {
     axios
       .get("https://bhalchandraschool.edu.np/api/aboutUs")
-      // .then((response) =>
-      //   console.log("response", response));
-      .then(response => setAboutData(response.data.data))
-      .catch(error => console.error(error));
+      .then((response) => setAboutData(response.data.data))
+      .catch((error) => console.error(error));
   }, []);
 
-  const mappedData = aboutData?.map(item => ({
+  const mappedData = aboutData?.map((item) => ({
     label: item.title,
     path: `/about/${item.slug}`,
-    photo: item.photo
+    photo: item.photo,
   }));
   const navItems = [
-    { label: 'HOME', path: '/home', children: [] },
+    { label: "HOME", path: "/home", children: [] },
     {
-      label: 'ABOUT',
-      children: mappedData
+      label: "ABOUT",
+      children: mappedData,
     },
     {
-      label: 'ACTIVITIES',
+      label: "ACTIVITIES",
 
       children: [
-        { label: 'Drawing Competition', path: '/draw' },
-        { label: 'School Election', path: '/election' },
-        { label: 'School Gardening', path: '/garden' },
-        { label: 'Friday Program', path: '/friday' }
+        { label: "Drawing Competition", path: "/draw" },
+        { label: "School Election", path: "/election" },
+        { label: "School Gardening", path: "/garden" },
+        { label: "Friday Program", path: "/friday" },
       ],
     },
     {
-      label: 'BLOGS',
-      path: '/blogs',
+      label: "BLOGS",
+      path: "/blogs",
       children: [],
     },
-    { label: 'TEAMS', path: '/teams', children: [] },
+    { label: "TEAMS", path: "/teams", children: [] },
     {
-      label: 'NOTICES',
+      label: "NOTICES",
 
       children: [
-
-        { label: 'Teacher Wanted', path: '/teacher' },
-        { label: 'Vacancy Announcement', path: '/vacancy' },
+        { label: "Teacher Wanted", path: "/teacher" },
+        { label: "Vacancy Announcement", path: "/vacancy" },
       ],
     },
     {
-      label: 'MEDIA',
-      children: [{ label: 'Gallery', path: '/gallery' }],
+      label: "MEDIA",
+      children: [{ label: "Gallery", path: "/gallery" }],
     },
-    { label: 'CONTACT US', path: '/contact-us', children: [] },
+    { label: "CONTACT US", path: "/contact-us", children: [] },
   ];
   const [activeIcon, setActiveIcon] = useState(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -112,9 +103,9 @@ export default function BootAppBar() {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -122,21 +113,21 @@ export default function BootAppBar() {
     const isActive = activeIcon === iconName;
     const showName = isActive && activeIcon !== null;
 
-    let iconColor = '#ffffff';
-    let hoverColor = '';
+    let iconColor = "#ffffff";
+    let hoverColor = "";
 
     switch (iconName) {
-      case 'facebook':
-        iconColor = '';
-        hoverColor = 'darkblue';
+      case "facebook":
+        iconColor = "";
+        hoverColor = "darkblue";
         break;
-      case 'twitter':
-        iconColor = '';
-        hoverColor = 'blue';
+      case "twitter":
+        iconColor = "";
+        hoverColor = "blue";
         break;
-      case 'youtube':
-        iconColor = '';
-        hoverColor = 'red';
+      case "youtube":
+        iconColor = "";
+        hoverColor = "red";
         break;
       default:
         break;
@@ -148,18 +139,18 @@ export default function BootAppBar() {
         display="flex"
         alignItems="center"
         p={1}
-        borderRight={isLastIcon ? 'none' : '1px solid white'}
+        borderRight={isLastIcon ? "none" : "1px solid white"}
         cursor="pointer"
         onMouseEnter={() => handleIconMouseEnter(iconName)}
         onMouseLeave={handleIconMouseLeave}
         style={{
           backgroundColor: isActive ? hoverColor : iconColor,
-          transition: 'background-color 0.3s ease',
+          transition: "background-color 0.3s ease",
         }}
       >
         <SocialIcon
           url={url}
-          style={{ height: 30, width: 30, marginRight: '5px' }}
+          style={{ height: 30, width: 30, marginRight: "5px" }}
           bgColor="#ffffff"
         />
         {!isMobile && showName && (
@@ -179,7 +170,7 @@ export default function BootAppBar() {
             <MenuItem
               onClick={(event) => handleClick(event, index)}
               selected={activeMenu === index}
-              style={{ backgroundColor: 'transparent' }}
+              style={{ backgroundColor: "transparent" }}
             >
               {item.label}
               <ArrowDropDownIcon />
@@ -190,15 +181,15 @@ export default function BootAppBar() {
               open={activeMenu === index}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'dropdown-menu',
+                "aria-labelledby": "dropdown-menu",
               }}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
             >
               {renderMenuItems(item.children)}
@@ -221,37 +212,35 @@ export default function BootAppBar() {
     });
   };
 
-
-
   return (
     <>
       <div
         style={{
-          backgroundColor: '#00008B',
-          color: 'white',
-          height: '45px',
-          display: isScrolled ? 'none' : 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 10px',
-          position: 'sticky',
+          backgroundColor: "#00008B",
+          color: "white",
+          height: "45px",
+          display: isScrolled ? "none" : "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 10px",
+          position: "sticky",
           top: 0,
           zIndex: 9999,
         }}
       >
         <Box display="flex" alignItems="center">
-          {renderIcon('facebook', 'https://facebook.com/jaketrent')}
-          {renderIcon('twitter', 'https://twitter.com/jaketrent')}
-          {renderIcon('youtube', 'https://youtube.com/jaketrent', true)}
+          {renderIcon("facebook", "https://facebook.com/jaketrent")}
+          {renderIcon("twitter", "https://twitter.com/jaketrent")}
+          {renderIcon("youtube", "https://youtube.com/jaketrent", true)}
         </Box>
         <Box display="flex" alignItems="center">
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginRight: '10px',
-              borderRight: '1px solid white',
-              paddingRight: '10px',
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
+              borderRight: "1px solid white",
+              paddingRight: "10px",
             }}
           >
             <AddIcCallIcon />
@@ -261,11 +250,11 @@ export default function BootAppBar() {
           </div>
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginRight: '10px',
-              borderRight: '1px solid white',
-              paddingRight: '10px',
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
+              borderRight: "1px solid white",
+              paddingRight: "10px",
             }}
           >
             <MailIcon />
@@ -273,7 +262,7 @@ export default function BootAppBar() {
               bhalchandraschool17@gmail.com
             </Typography>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <AccessTimeIcon />
             <Typography variant="body2" color="inherit" component="div">
               24 hours
@@ -283,50 +272,45 @@ export default function BootAppBar() {
       </div>
       <nav
         className="navbar sticky-top navbar-expand-lg bg-body-tertiary"
-
         style={{
-          marginTop: '-10px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          height: '125px',
-          overflow: isMobile ? 'hidden' : 'visible',
-          width: '100%',
-          ...(!isMobile && { paddingRight: '0px' })
+          marginTop: "-10px",
+          display: "flex",
+          justifyContent: "space-between",
+          height: "125px",
+          overflow: isMobile ? "hidden" : "visible",
+          width: "100%",
+          ...(!isMobile && { paddingRight: "0px" }),
         }}
       >
-
-
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            justifyContent: isMobile ? 'center' : 'space-between',
-            alignItems: 'flex-end',
-            padding: '20px',
-            height: '125px',
-            backgroundColor: 'lightblue',
-            overflowX: isMobile ? 'hidden' : 'visible',
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: isMobile ? "center" : "space-between",
+            alignItems: "flex-end",
+            padding: "20px",
+            height: "125px",
+            backgroundColor: "lightblue",
+            overflowX: isMobile ? "hidden" : "visible",
           }}
           className="container-fluid menu-items"
         >
-
           <div
             style={{
-              position: 'sticky',
+              position: "sticky",
               top: 0,
-              marginRight: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              height: '100%',
+              marginRight: "20px",
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
             }}
           >
-            <Link to="/home" style={{ textDecoration: 'none' }}>
+            <Link to="/home" style={{ textDecoration: "none" }}>
               <img
                 src="/@assets/myimg/logo.png"
                 alt="Logo"
                 style={{
-                  height: isMobile ? '90px' : '110px',
-
+                  height: isMobile ? "90px" : "110px",
                 }}
               />
             </Link>
@@ -341,9 +325,9 @@ export default function BootAppBar() {
                       <li className="nav-item">
                         <Button
                           style={{
-                            fontWeight: 'bold',
-                            fontSize: '1.1rem',
-                            color: 'black',
+                            fontWeight: "bold",
+                            fontSize: "1.1rem",
+                            color: "black",
                           }}
                           onClick={(event) => handleClick(event, index)}
                           aria-expanded={activeMenu === index}
@@ -356,15 +340,15 @@ export default function BootAppBar() {
                           open={activeMenu === index}
                           onClose={handleClose}
                           MenuListProps={{
-                            'aria-labelledby': 'dropdown-menu',
+                            "aria-labelledby": "dropdown-menu",
                           }}
                           anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
+                            vertical: "bottom",
+                            horizontal: "left",
                           }}
                           transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
+                            vertical: "top",
+                            horizontal: "left",
                           }}
                         >
                           {renderMenuItems(item.children)}
@@ -376,9 +360,9 @@ export default function BootAppBar() {
                           className="nav-link"
                           to={item.path}
                           style={{
-                            fontWeight: 'bold',
-                            fontSize: '1.1rem',
-                            color: 'black',
+                            fontWeight: "bold",
+                            fontSize: "1.1rem",
+                            color: "black",
                           }}
                         >
                           {item.label}
@@ -397,11 +381,7 @@ export default function BootAppBar() {
                 aria-haspopup="true"
                 onClick={(event) => handleClick(event, null)}
               >
-                {activeMenu === null ? (
-                  <MenuIcon />
-                ) : (
-                  <CloseIcon />
-                )}
+                {activeMenu === null ? <MenuIcon /> : <CloseIcon />}
               </Button>
               <Menu
                 id="simple-menu"
