@@ -16,21 +16,9 @@ import Garden from "./pages/Activities/Components/Garden";
 import Notice from "./pages/Notices/Notice";
 import Teacherwant from './pages/Notices/Components/Teacherwant';
 import Vacancy from './pages/Notices/Components/Vacancy';
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 
 function App() {
-  const [slug, setSlug] = useState();
-  useEffect(() => {
-    axios
-      .get("https://bhalchandraschool.edu.np/api/aboutUs")
-      // .then((response) =>
-      //   console.log("response", response));
-      .then(response => setSlug(response.data.data))
-      .catch(error => console.error(error));
-  }, []);
-
 
 
   return (
@@ -38,12 +26,9 @@ function App() {
       <Navbar />
       <div>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          {
-            slug?.map(item => (
-              <Route path={`/about/${item.slug}`} element={<About />} />
-            ))
-          }
+          <Route path={"/about/:id"} element={<About />} />
           <Route path="/contact-us" element={<Contact />} />
           <Route path="/message" element={<Message />} />
           <Route path="/teams" element={<Teams />} />

@@ -9,13 +9,9 @@ import Abc from "./Components/Abc";
 import Voice from "./Components/Voice";
 import Xyz from "./Components/Xyz";
 import Photos from "./Components/photos";
-import axios from "axios";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { fetchCarouselData } from "../../Api/api";
 
 export default function Home() {
-
-
   const [carouselData, setCarouselData] = useState([]);
 
   useEffect(() => {
@@ -24,18 +20,22 @@ export default function Home() {
       offset: 900,
     });
 
-    // Fetch API data using Axios
-    axios
-      .get("https://bhalchandraschool.edu.np/api/sliders")
-      // .then((response) =>
-      //   console.log("response", response));
-      .then(response => setCarouselData(response.data.data))
-      .catch(error => console.error(error));
+    // Fetch API data 
+    fetchCarouselData()
+      .then((data) => setCarouselData(data))
+      .catch((error) => console.error(error));
   }, []);
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const renderCarouselItems = () => {
+    return carouselData.map((item) => (
+      <div key={item.id}>
+        <img src={item.photo} alt={item.title} className="carousel-image" />
+        <div className="image-overlay">
+          <h1 className="image-text">{item.title}</h1>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <>
@@ -49,23 +49,11 @@ export default function Home() {
           dynamicHeight={true}
           autoPlay={true}
           style={{
-            marginRight: isMobile ? "20px" : "0",
+            marginRight: "20px",
             height: "800px",
           }}
         >
-          {carouselData.map(item => (
-            <div key={item.id}>
-              <img
-                src={item.photo}
-                alt={item.title}
-                className="carousel-image"
-              />
-              <div className="image-overlay">
-                <h1 className="image-text">{item.title}</h1>
-              </div>
-            </div>
-          ))}
-
+          {renderCarouselItems()}
         </Carousel>
 
         <Abc />

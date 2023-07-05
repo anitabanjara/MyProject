@@ -14,37 +14,36 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { SocialIcon } from 'react-social-icons';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from "axios";
+import { fetchAboutData } from "./Api/api";
 
 
 
 const paddingBox = { px: { xs: 2, xl: 38 } };
 
 export default function BootAppBar() {
-  const [aboutData, setAboutData] = useState();
+  const [aboutData, setAboutData] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("https://bhalchandraschool.edu.np/api/aboutUs")
-      // .then((response) =>
-      //   console.log("response", response));
-      .then(response => setAboutData(response.data.data))
-      .catch(error => console.error(error));
+    fetchAboutData()
+      .then((data) => setAboutData(data))
+      .catch((error) => console.error(error));
   }, []);
 
-  const mappedData = aboutData?.map(item => ({
+  const mappedData = aboutData?.map((item) => ({
     label: item.title,
     path: `/about/${item.slug}`,
-    photo: item.photo
+    photo: item.photo,
   }));
+
   const navItems = [
-    { label: 'HOME', path: '/home', children: [] },
+    { label: "HOME", path: "/home", children: [] },
+
     {
-      label: 'ABOUT',
-      children: mappedData
+      label: "ABOUT",
+      children: mappedData,
     },
     {
-      label: 'ACTIVITIES',
+      label: "ACTIVITIES",
 
       children: [
         { label: 'Drawing Competition', path: '/draw' },

@@ -12,14 +12,26 @@ import "aos/dist/aos.css";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
+import { fetchAboutUsData } from "../../../Api/api";
 
 export default function Abc() {
+    const [aboutUsData, setAboutUsData] = useState(null);
+    const [expanded, setExpanded] = useState(false);
+
     useEffect(() => {
         AOS.init();
         AOS.refresh();
+
+        fetchAboutUsData()
+            .then((data) => setAboutUsData(data))
+            .catch((error) => console.error(error));
     }, []);
 
-    const [expanded, setExpanded] = useState(false);
+    function convertHtmlToText(html) {
+        const element = document.createElement('div');
+        element.innerHTML = html;
+        return element.textContent || element.innerText || '';
+    }
 
     const handleToggleExpand = () => {
         setExpanded(!expanded);
@@ -62,96 +74,80 @@ export default function Abc() {
                             marginTop: { xs: "2rem", sm: "1rem" },
                         }}
                     >
-                        ABOUT US
+                        {aboutUsData?.title}
                     </Typography>
                 </Box>
                 <br />
-                <Card style={{ width: "75%", margin: "0 auto" }}>
-                    <Grid
-                        container
-                        alignItems="center"
-                        justifyContent="flex-end"
-
-                    >
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={6}
-                            lg={6}
-                            xl={6}
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                padding: "1rem",
-
-                            }}
-                        >
-                            <CardContent sx={{ textAlign: "left", padding: "1rem" }}>
-                                <Typography variant="h4"></Typography>
-                                <br />
-
-                                <Typography variant="body">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                                    consectetur, purus eu placerat ullamcorper, metus justo
-                                    consequat tortor, vel scelerisque lorem massa non nisi. Integer
-                                    vulputate finibus mauris, vitae pellentesque dolor pharetra a.
-                                    Sed lacinia sapien non eleifend iaculis. In eu ullamcorper
-                                    eros. Vestibulum ante ipsum primis in faucibus orci luctus et
-                                    ultrices posuere cubilia curae; Mauris consequat lorem justo,
-                                    eu euismod lectus finibus at. Sed vel sapien eu est aliquet
-                                    tempus. Fusce malesuada libero in est faucibus, eget cursus quam
-                                    suscipit. Nulla facilisi. Sed venenatis, tellus et maximus
-                                    eleifend, urna metus viverra ipsum, ut aliquam arcu orci ut
-                                    sapien. Sed auctor auctor arcu non rhoncus. Fusce finibus
-                                    turpis ac nunc tristique tempus. Nam ultrices lacinia felis, ut
-                                    faucibus mi commodo ut. Proin lacinia, tellus sed eleifend
-                                    lacinia, lorem ex varius ligula, id pharetra metus risus id
-                                    ipsum.
-                                </Typography>
-                                <br />
-                                {!expanded && (
-                                    <Typography variant="body" sx={{ display: "inline" }}>
-                                        <Link to="/about" style={{ textDecoration: "none" }}>
-                                            <Button sx={{ textTransform: "none", paddingLeft: 0 }}>
-                                                Read More
+                {aboutUsData && (
+                    <Card style={{ width: "75%", margin: "0 auto" }}>
+                        <Grid container alignItems="center" justifyContent="flex-end">
+                            <Grid
+                                item
+                                xs={12}
+                                sm={6}
+                                md={6}
+                                lg={6}
+                                xl={6}
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    padding: "1rem",
+                                }}
+                            >
+                                <CardContent sx={{ textAlign: "left", padding: "1rem" }}>
+                                    <Typography variant="h4"></Typography>
+                                    <br />
+                                    <Typography variant="body">
+                                        {expanded
+                                            ? convertHtmlToText(aboutUsData.excerpt)
+                                            : convertHtmlToText(aboutUsData.excerpt).slice(0, 530) + "..."}
+                                    </Typography>
+                                    <br />
+                                    <br />
+                                    {!expanded && (
+                                        <Link to={`/about/${aboutUsData.slug}`} style={{ textDecoration: "none" }}>
+                                            <Button
+                                                sx={{ textTransform: "none", paddingLeft: 0 }}
+                                                onClick={handleToggleExpand}
+                                            >
+                                                Read More....
                                             </Button>
                                         </Link>
-                                        .....
-                                    </Typography>
-                                )}
-                            </CardContent>
-                        </Grid>
+                                    )}
+                                </CardContent>
 
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={6}
-                            lg={6}
-                            xl={6}
-                            sx={{
-                                height: 200,
-                                transition: "transform 0.3s",
-                                "&:hover": {
-                                    transform: "scale(1.05)",
-                                },
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        >
-                            <img
-                                className="responsive"
-                                src="/@assets/myimg/a.jpg"
-                                alt=""
-                                style={{ maxWidth: "70%", height: "auto" }}
-                            />
+                            </Grid>
+
+                            <Grid
+                                item
+                                xs={12}
+                                sm={6}
+                                md={6}
+                                lg={6}
+                                xl={6}
+                                sx={{
+                                    height: 200,
+                                    transition: "transform 0.3s",
+                                    "&:hover": {
+                                        transform: "scale(1.05)",
+                                    },
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <img
+                                    className="responsive"
+                                    src={aboutUsData?.photo}
+                                    alt=""
+                                    style={{ maxWidth: "70%", height: "auto" }}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Card>
+                    </Card>
+                )}
 
                 <br />
                 <br />
@@ -225,7 +221,6 @@ export default function Abc() {
                             </Link>
                         ))}
                     </Carousel>
-
                 </Box>
             </Box>
         </>
