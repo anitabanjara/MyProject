@@ -5,17 +5,11 @@ import Footer from "./Components/Footer";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home/Home";
-import Message from "./pages/Message";
 import Teams from './pages/Teams';
-import Gallery from "./pages/Gallery";
+import Media from "./pages/Media";
 import Activ from './pages/Activities/Activ';
-import Draw from './pages/Activities/Components/Draw'
-import Election from "./pages/Activities/Components/Election";
-import Friday from "./pages/Activities/Components/Friday";
-import Garden from "./pages/Activities/Components/Garden";
 import Notice from "./pages/Notices/Notice";
-import Teacherwant from './pages/Notices/Components/Teacherwant';
-import Vacancy from './pages/Notices/Components/Vacancy';
+import Blog from "./pages/Blog";
 
 
 function App() {
@@ -30,17 +24,11 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path={"/about/:id"} element={<About />} />
           <Route path="/contact-us" element={<Contact />} />
-          <Route path="/message" element={<Message />} />
           <Route path="/teams" element={<Teams />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/activ" element={<Activ />} />
-          <Route path="/draw" element={<Draw />} />
-          <Route path="/election" element={<Election />} />
-          <Route path="/friday" element={<Friday />} />
-          <Route path="/garden" element={< Garden />} />
-          <Route path="/notice" element={<Notice />} />
-          <Route path="/teacher" element={<Teacherwant />} />
-          <Route path="/vacancy" element={<Vacancy />} />
+          <Route path="/media" element={<Media />} />
+          <Route path="/activity/:id" element={<Activ />} />
+          <Route path="/notice/:id" element={<Notice />} />
+          <Route path="/blog" element={<Blog />} />
 
         </Routes>
       </div>

@@ -1,99 +1,25 @@
+import { useEffect, useState } from "react";
+import { Box, Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { Box, Grid, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { fetchLinksData } from "../Api/api";
 
-export default function links() {
-    const links = [
-        {
-            title: "E-Library",
-            link: "https://pustakalaya.org/en/",
-        },
-        {
-            title: "Teaching",
-            link: "https://mysecondteacher.com.np/",
-        },
-        {
-            title: "SEE",
-            link: "https://see.gov.np/",
-        },
-        {
-            title: "Curriculum Development Center",
-            link: "https://see.gov.np/",
-        },
-        {
-            title: "Grid",
-            link: "https://www.moecdc.gov.np/en/specification-grid",
-        },
-        {
-            title: "TSC",
-            link: "https://tsc.gov.np/",
-        },
-        {
-            title: "IEMIS",
-            link: "https://iemis.doe.gov.np/",
-        },
-        {
-            title: "Learn English",
-            link: "https://learnenglishkids.britishcouncil.org/",
-        },
-        {
-            title: "Learn English for teens",
-            link: "https://learnenglishteens.britishcouncil.org/",
-        },
-        {
-            title: "Learning Portal",
-            link: "https://www.google.com/",
-        },
-        {
-            title: "Open Learning Resources",
-            link: "https://www.unesco.org/en/open-educational-resources",
-        },
-        {
-            title: "Steam Education Resource",
-            link: "https://www.unesco.org/en/open-educational-resources",
-        },
-        {
-            title: "PBS Learners' Resources",
-            link: "https://www.unesco.org/en/open-educational-resources",
-        },
-    ];
-    const info = [
-        {
-            title: "Home",
-            link: "/home",
-        },
-        {
-            title: "Activities",
-            link: "/",
-        },
-        {
-            title: "Teams",
-            link: "/teams",
-        },
+export default function Links() {
+    const [linksData, setLinksData] = useState([]);
 
-    ];
+    useEffect(() => {
+        fetchLinksData()
+            .then((data) => setLinksData(data))
+            .catch((error) => console.error(error));
+    }, []);
 
     const infos = [
-        {
-            title: "News",
-            link: "/",
-        },
-        {
-            title: "Notices",
-            link: "/",
-        },
-        {
-            title: "Gallery",
-            link: "/",
-        },
-        {
-            title: "Contact",
-            link: "/",
-        },
-
+        { title: "Info 1", link: "/info1" },
+        { title: "Info 2", link: "/info2" },
+        // Add more items as needed
     ];
 
     return (
@@ -129,56 +55,32 @@ export default function links() {
                         >
                             Important links
                         </Typography>
-                        {links.map((item) => (
-                            <Grid
-                                sx={{
-                                    textAlign: { xs: "center", xl: "left" },
-                                }}
-                                key={item.title}
-                                style={{ marginTop: "8px" }}
-                                item
-                                xs={12}
-                            >
-                                <a
-                                    href={item.link}
-                                    style={{ textDecoration: "none", color: "#ffffff" }}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                        {Array.isArray(linksData) && linksData.length > 0 ? (
+                            linksData.map((item) => (
+                                <Grid
+                                    sx={{
+                                        textAlign: { xs: "center", xl: "left" },
+                                    }}
+                                    key={item.title}
+                                    style={{ marginTop: "8px" }}
+                                    item
+                                    xs={12}
                                 >
-                                    <Typography sx={{ fontSize: 14 }}>{item.title}</Typography>
-                                </a>
-                            </Grid>
-                        ))}
-                    </Grid>
-                    <Grid item sx={{ mb: 3 }} xs={12} md={3} xl={3}>
-                        <Typography
-                            variant="h6"
-                            sx={{
-                                fontWeight: "bold",
-                                color: "#ffffff",
-                                textAlign: { xs: "center", xl: "left" },
-                            }}
-                        >
-                            Page Links
-                        </Typography>
-                        {info.map((item) => (
-                            <Grid
-                                sx={{
-                                    textAlign: { xs: "center", xl: "left" },
-                                    marginTop: "8px",
-                                }}
-                                key={item.title}
-                                item
-                                xs={12}
-                            >
-                                <Link
-                                    style={{ textDecoration: "none", color: "#ffffff" }}
-                                    to={item.link}
-                                >
-                                    <Typography sx={{ fontSize: 14 }}>{item.title}</Typography>
-                                </Link>
-                            </Grid>
-                        ))}
+                                    <a
+                                        href={item.link}
+                                        style={{ textDecoration: "none", color: "#ffffff" }}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <Typography sx={{ fontSize: 14 }}>{item.title}</Typography>
+                                    </a>
+                                </Grid>
+                            ))
+                        ) : (
+                            <Typography>
+                                {linksData.length === 0 ? "No links available." : "Loading..."}
+                            </Typography>
+                        )}
                     </Grid>
 
                     <Grid item sx={{ mb: 3 }} xs={12} md={3} xl={3}>
@@ -289,7 +191,6 @@ export default function links() {
                     container
                     justifyContent="center"
                     sx={{
-
                         maxWidth: "xl",
                         mx: "auto",
                         marginTop: "20px",

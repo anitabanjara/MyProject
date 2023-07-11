@@ -1,8 +1,7 @@
 // api/urls.js
 
-const API_URLS = {
-    home: "https://bhalchandraschool.edu.np/api/sliders",
-    about: "https://bhalchandraschool.edu.np/api/aboutUs",
-};
+const API_URLs =
+    "https://bhalchandraschool.edu.np/api/"
 
-export default API_URLS;
+
+export default API_URLs;

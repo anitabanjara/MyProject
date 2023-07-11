@@ -13,9 +13,12 @@ import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
 import { fetchAboutUsData } from "../../../Api/api";
+import { fetchActivitiesData } from "../../../Api/api";
 
 export default function Abc() {
     const [aboutUsData, setAboutUsData] = useState(null);
+    const [activitiesData, setActivitiesData] = useState(null);
+
     const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
@@ -25,6 +28,14 @@ export default function Abc() {
         fetchAboutUsData()
             .then((data) => setAboutUsData(data))
             .catch((error) => console.error(error));
+
+
+
+        fetchActivitiesData()
+            .then((data) => setActivitiesData(data))
+            .catch((error) => console.error(error));
+
+
     }, []);
 
     function convertHtmlToText(html) {
@@ -37,28 +48,9 @@ export default function Abc() {
         setExpanded(!expanded);
     };
 
-    const events = [
-        {
-            pic: "/@assets/myimg/y.jpg",
-            title: "School Election",
-            path: "/election",
-        },
-        {
-            pic: "/@assets/myimg/z.jpg",
-            title: "School Gardening",
-            path: "/garden",
-        },
-        {
-            pic: "/@assets/myimg/x.jpg",
-            title: "Friday Program",
-            path: "/friday",
-        },
-        {
-            pic: "/@assets/myimg/draw.jpg",
-            title: "Drawing Competition",
-            path: "/draw",
-        },
-    ];
+
+    const matchedObject = activitiesData && activitiesData.find((item) => item.slug === 'school-election');
+
 
     return (
         <>
@@ -107,7 +99,7 @@ export default function Abc() {
                                     <br />
                                     <br />
                                     {!expanded && (
-                                        <Link to={`/about/${aboutUsData.slug}`} style={{ textDecoration: "none" }}>
+                                        <Link to={`/about/${aboutUsData?.slug}`} style={{ textDecoration: "none" }}>
                                             <Button
                                                 sx={{ textTransform: "none", paddingLeft: 0 }}
                                                 onClick={handleToggleExpand}
@@ -154,6 +146,7 @@ export default function Abc() {
                 <br />
                 <br />
 
+
                 <Box sx={{ mt: 1 }}>
                     <Typography
                         variant="h4"
@@ -165,10 +158,13 @@ export default function Abc() {
                             marginTop: "2rem",
                         }}
                     >
-                        SCHOOL ACTIVITIES
+                        ACTIVITIES
                     </Typography>
+
                 </Box>
+
                 <br />
+
                 <Box sx={{ px: { xl: 20, xs: 1 }, marginTop: "1rem" }}>
                     <Carousel
                         className="carousel"
@@ -181,48 +177,76 @@ export default function Abc() {
                         emulateTouch={true}
                         centerSlidePercentage={30}
                     >
-                        {events.map((card, index) => (
-                            <Link to={card.path} key={index}>
-                                <Grid
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "left",
-                                        textAlign: "left",
-                                        marginTop: "1rem",
-                                    }}
-                                    item
-                                    key={index}
-                                >
-                                    <Card
+                        {Array.isArray(activitiesData) &&
+                            activitiesData.map((card, index) => (
+                                <Link to={`/activity/${card.slug}`} key={index}>
+                                    <Grid
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "left",
+                                            textAlign: "left",
+                                            marginTop: "1rem",
+                                        }}
+                                        item
                                         key={index}
-                                        sx={{ width: { xs: "95%", xl: "90%" }, marginBottom: 5 }}
                                     >
-                                        <CardMedia
-                                            sx={{ height: { xl: 200, xs: 100 } }}
-                                            image={card.pic}
-                                            title="green iguana"
-                                        />
-                                        <CardContent>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                                sx={{
-                                                    color: "black",
-                                                    fontWeight: "bold",
-                                                    marginTop: "0.5rem",
-                                                }}
-                                            >
-                                                {card.title}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            </Link>
-                        ))}
+                                        <Card
+                                            key={index}
+                                            sx={{ width: { xs: "95%", xl: "90%" }, marginBottom: 5 }}
+                                        >
+                                            <CardMedia
+                                                sx={{ height: { xl: 200, xs: 100 } }}
+                                                image={card.photo}
+                                                title={card.title}
+                                            />
+                                            <CardContent>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="h6"
+                                                    component="div"
+                                                    sx={{
+                                                        color: "black",
+                                                        fontWeight: "bold",
+                                                        marginTop: "0.5rem",
+                                                    }}
+                                                >
+                                                    {card.title}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                </Link>
+                            ))}
                     </Carousel>
+
                 </Box>
+                {!expanded && (
+                    <Box sx={{ backgroundColor: 'lightgrey', padding: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
+
+                        <Box sx={{ mt: 4 }}>
+
+                            <Link to={`/activity/${matchedObject?.slug}`} style={{ textDecoration: "none" }}>
+                                <Button
+                                    variant="contained" color="primary" size="medium"
+                                    sx={{
+                                        py: 2
+                                    }}
+                                    onClick={handleToggleExpand}
+                                >
+                                    Read More....
+                                </Button>
+                            </Link>
+
+
+                            <br />
+                            <br />
+                        </Box>
+                    </Box>
+                )}
+
             </Box>
+
+
         </>
     );
 }

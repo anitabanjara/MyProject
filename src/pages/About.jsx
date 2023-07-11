@@ -51,7 +51,7 @@ const About = () => {
             <CardContent sx={{ textAlign: "left", padding: "1rem", marginLeft: "50px" }}>
               <Typography variant="h4"></Typography>
               <br />
-              <Typography variant="body">
+              <Typography variant="body" >
                 {normalText}
               </Typography>
               <br />
@@ -75,12 +75,16 @@ const About = () => {
               },
             }}
           >
-            <img
-              className="responsive"
-              src={matchedObject?.photo}
-              alt=""
-              style={{ maxWidth: "60%", height: "auto" }}
-            />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <img
+                className="responsive"
+                src={matchedObject?.photo}
+                alt=""
+                style={{ width: "350px", height: "auto" }}
+              />
+            </div>
+
+
           </Grid>
         </Grid>
       </Card>

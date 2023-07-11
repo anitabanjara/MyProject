@@ -15,6 +15,10 @@ import { SocialIcon } from 'react-social-icons';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchAboutData } from "./Api/api";
+import { fetchActivityData } from './Api/api';
+import { fetchNoticeData } from './Api/api';
+import { fetchGalleryData } from './Api/api';
+
 
 
 
@@ -22,6 +26,9 @@ const paddingBox = { px: { xs: 2, xl: 38 } };
 
 export default function BootAppBar() {
   const [aboutData, setAboutData] = useState([]);
+  const [activityData, setActivityData] = useState([]);
+  const [noticeData, setNoticeData] = useState([]);
+  const [galleryData, setGalleryData] = useState([]);
 
   useEffect(() => {
     fetchAboutData()
@@ -35,6 +42,47 @@ export default function BootAppBar() {
     photo: item.photo,
   }));
 
+
+  useEffect(() => {
+    fetchActivityData()
+      .then((data) => setActivityData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const mappedData1 = activityData?.map((item) => ({
+    label: item.title,
+    path: `/activity/${item.slug}`,
+    photo: item.photo,
+  }));
+
+  useEffect(() => {
+    fetchNoticeData()
+      .then((data) => setNoticeData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const mappedData2 = noticeData?.map((item) => ({
+    label: item.title,
+    path: `/notice/${item.id}`,
+    photo: item.photo,
+  }));
+
+  useEffect(() => {
+    fetchGalleryData()
+      .then((data) => setGalleryData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  // const mappedData3 = galleryData?.map((item) => ({
+  //   label: item.title,
+  //   path: `/media/${item.slug}`,
+  //   photo: item.cover_photo,
+  // }));
+
+  // console.log(mappedData3);
+
+
+
   const navItems = [
     { label: "HOME", path: "/home", children: [] },
 
@@ -45,32 +93,29 @@ export default function BootAppBar() {
     {
       label: "ACTIVITIES",
 
-      children: [
-        { label: 'Drawing Competition', path: '/draw' },
-        { label: 'School Election', path: '/election' },
-        { label: 'School Gardening', path: '/garden' },
-        { label: 'Friday Program', path: '/friday' }
-      ],
+      children: mappedData1,
+
     },
     {
       label: 'BLOGS',
-      path: '/blogs',
+      path: '/blog',
       children: [],
     },
     { label: 'TEAMS', path: '/teams', children: [] },
-    {
-      label: 'NOTICES',
 
-      children: [
-
-        { label: 'Teacher Wanted', path: '/teacher' },
-        { label: 'Vacancy Announcement', path: '/vacancy' },
-      ],
-    },
     {
-      label: 'MEDIA',
-      children: [{ label: 'Gallery', path: '/gallery' }],
+      label: "NOTICES",
+
+      children: mappedData2,
     },
+
+    {
+      label: "MEDIA", path: '/media',
+
+      children: [],
+    },
+
+
     { label: 'CONTACT US', path: '/contact-us', children: [] },
   ];
   const [activeIcon, setActiveIcon] = useState(null);
