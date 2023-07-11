@@ -68,7 +68,7 @@ export default function Photos() {
                             md={4}
                         >
                             <Card sx={{ width: "90%", m: 2, p: 1 }}>
-                                <Link to={`/gallery/${card.slug}`} style={{ textDecoration: "none" }}>
+                                <Link to={`/media`} style={{ textDecoration: "none" }}>
                                     <div data-aos="flip-up">
                                         <CardMedia
                                             sx={{
@@ -84,14 +84,7 @@ export default function Photos() {
                                             alt=""
                                             title="green iguana"
                                         />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h5" component="div" color="#0000FF">
-                                                {card.title}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                {card.post}
-                                            </Typography>
-                                        </CardContent>
+
                                     </div>
                                 </Link>
                             </Card>

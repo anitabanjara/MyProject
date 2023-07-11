@@ -120,30 +120,20 @@ export const fetchTeamsData = async () => {
     }
 };
 
-// export const fetchGalleryData = async () => {
-//     try {
-//         const response = await axios.get(`${API_URLS}gallery`);
-//         return response.data.data;
+export const fetchGalleryData = async () => {
+    try {
+        const response = await axios.get(`${API_URLS}gallery`);
+        return response.data.data;
 
-//     } catch (error) {
-//         console.error(error);
-//         return [];
-//     }
-// };
-
-
-// api.js
-export const fetchGalleryData = (slug) => {
-    const url = `${API_URLS}gallery/${slug}`; // Replace with your API endpoint
-
-    return fetch(url)
-        .then((response) => response.json())
-        .then((data) => data.data)
-        .catch((error) => {
-            console.error(error);
-            throw new Error("Failed to fetch gallery data");
-        });
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 };
+
+
+
+
 
 
 
