@@ -8,7 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Abc from "./Components/Abc";
 import Voice from "./Components/Voice";
 import Xyz from "./Components/Xyz";
-import Photos from "./Components/photos";
+import Photos from "./Components/Photos";
 import { fetchCarouselData } from "../../Api/api";
 
 export default function Home() {

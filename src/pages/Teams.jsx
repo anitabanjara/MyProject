@@ -49,19 +49,14 @@ export default function Teams() {
                                             />
                                             <CardContent>
 
-                                                <Typography gutterBottom variant="h5" component="div" color='#0000FF'>
+                                                <Typography gutterBottom variant="h5" component="div" color='text.primary'>
                                                     {member.name}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
+                                                <Typography variant="body2" color="text.primary">
                                                     {member.post}
                                                 </Typography>
 
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Email: {member.email}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Phone: {member.phone}
-                                                </Typography>
+
                                             </CardContent>
                                         </div>
                                     </Card>

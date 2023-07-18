@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, CardContent, Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { fetchNoticeData } from '../../Api/api';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const Notice = () => {
     const { id } = useParams();
@@ -13,16 +15,15 @@ const Notice = () => {
             .catch((error) => console.error(error));
     }, []);
 
+
     if (!noticeData) {
-        return <Typography>Loading...</Typography>;
+        return <Typography>Loading......</Typography>;
     }
 
     const matchedObject = noticeData.find((item) => item.id === parseInt(id));
 
-    console.log(matchedObject);
-
     if (!matchedObject) {
-        return <Typography>Notice not found.</Typography>;
+        return <CircularProgress />;
     }
 
     return (
@@ -69,9 +70,11 @@ const Notice = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginTop: '50px',
+                            marginBottom: '50px',
                             transition: 'transform 0.3s',
                             '&:hover': {
                                 transform: 'scale(1.05)',
+
                             },
                         }}
                     >
@@ -80,10 +83,11 @@ const Notice = () => {
                                 className="responsive"
                                 src={matchedObject?.photo}
                                 alt=""
-                                style={{ width: '350px', height: 'auto' }}
+                                style={{ maxWidth: '200px', maxHeight: '300px', width: '100%', height: 'auto' }}
                             />
                         </div>
                     </Grid>
+                    <br />
                 </Grid>
             </Card>
             <br />

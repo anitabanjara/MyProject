@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import { Box, Container, Typography, TextField, Stack, Button, Card } from '@mui/material';
+import axios from 'axios';
 
-
-const Contact = () => {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [subject, setSubject] = useState('')
-  const [phone, setPhone] = useState('')
-  const [message, setMessage] = useState('')
+export default function Contact() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
 
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(firstName, lastName, email, dateOfBirth)
+
+    const data = {
+      name,
+      email,
+      subject,
+      message,
+      phone,
+    };
+    axios.post('https://bhalchandraschool.edu.np/api/contact', data)
+      .then(response => {
+        console.log(response.data);
+        // Handle success response here
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle error here
+      });
   }
 
 
@@ -51,30 +66,20 @@ const Contact = () => {
                 justifyContent: 'center'
               }}>
               <form onSubmit={handleSubmit} >
-                <Stack spacing={2} direction="row" sx={{ marginTop: 5 }}>
-                  <TextField
-                    type="text"
-                    sx={{ marginBottom: '30px' }}
-                    variant='outlined'
-                    color='secondary'
-                    label="First Name"
-                    onChange={e => setFirstName(e.target.value)}
-                    value={firstName}
-                    fullWidth
-                    required
-                  />
-                  <TextField
-                    type="text"
-                    sx={{ marginBottom: '30px' }}
-                    variant='outlined'
-                    color='secondary'
-                    label="Last Name"
-                    onChange={e => setLastName(e.target.value)}
-                    value={lastName}
-                    fullWidth
-                    required
-                  />
-                </Stack>
+
+                <TextField
+                  type="text"
+                  sx={{ marginBottom: '30px' }}
+                  variant='outlined'
+                  color='secondary'
+                  label="Name"
+                  onChange={e => setName(e.target.value)}
+                  value={name}
+                  fullWidth
+                  required
+                />
+
+
                 <TextField
                   type="email"
                   sx={{ marginBottom: '30px' }}
@@ -129,7 +134,7 @@ const Contact = () => {
                   maxRows={4}
 
                 />
-                <Button variant="contained" color="success" size='large'>
+                <Button onClick={handleSubmit} variant="contained" color="success" size='large'>
                   Send message
                 </Button>
 
@@ -171,4 +176,3 @@ const Contact = () => {
   );
 };
 
-export default Contact;

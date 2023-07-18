@@ -17,8 +17,17 @@ export default function Links() {
     }, []);
 
     const infos = [
-        { title: "Info 1", link: "/info1" },
-        { title: "Info 2", link: "/info2" },
+        { title: "Home", link: "/home" },
+        { title: "About", link: `/about/:id` },
+        { title: "Teams", link: "/teams" }
+        // Add more items as needed
+    ];
+
+    const info = [
+        { title: "News", link: "/news" },
+        { title: "Notice", link: "/notice" },
+        { title: "Contact", link: "/contact-us" },
+        { title: "Activities", link: "/activ" }
         // Add more items as needed
     ];
 
@@ -95,6 +104,38 @@ export default function Links() {
                             Page Links
                         </Typography>
                         {infos.map((item) => (
+                            <Grid
+                                sx={{
+                                    textAlign: { xs: "center", xl: "left" },
+                                    marginTop: "8px",
+                                }}
+                                key={item.title}
+                                item
+                                xs={12}
+                            >
+                                <Link
+                                    style={{ textDecoration: "none", color: "#ffffff" }}
+                                    to={item.link}
+                                >
+                                    <Typography sx={{ fontSize: 14 }}>{item.title}</Typography>
+                                </Link>
+                            </Grid>
+                        ))}
+                    </Grid>
+
+
+                    <Grid item sx={{ mb: 3 }} xs={12} md={3} xl={3}>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                fontWeight: "bold",
+                                color: "#ffffff",
+                                textAlign: { xs: "center", xl: "left" },
+                            }}
+                        >
+                            Page Links
+                        </Typography>
+                        {info.map((item) => (
                             <Grid
                                 sx={{
                                     textAlign: { xs: "center", xl: "left" },

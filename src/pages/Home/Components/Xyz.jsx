@@ -18,7 +18,7 @@ export default function Teams() {
 
     }, []);
 
-    console.log(teamData);
+    //console.log(teamData);
 
     return (
         <>

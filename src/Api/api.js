@@ -132,6 +132,16 @@ export const fetchGalleryData = async () => {
 };
 
 
+export const fetchSiteData = async () => {
+    try {
+        const response = await axios.get(`${API_URLS}siteSetting`);
+        return response.data.data;
+
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
 
 
 

@@ -10,7 +10,7 @@ const Voice = () => {
 
     useEffect(() => {
         AOS.init({
-            duration: 1000,
+            duration: 400,
             offset: 900,
         });
         AOS.refresh();

@@ -75,7 +75,7 @@ export default function Abc() {
                         <Grid container alignItems="center" justifyContent="flex-end">
                             <Grid
                                 item
-                                xs={12}
+                                xs={19}
                                 sm={6}
                                 md={6}
                                 lg={6}

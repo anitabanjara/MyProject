@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MailIcon from '@mui/icons-material/Mail';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { SocialIcon } from 'react-social-icons';
@@ -17,7 +16,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { fetchAboutData } from "./Api/api";
 import { fetchActivityData } from './Api/api';
 import { fetchNoticeData } from './Api/api';
-import { fetchGalleryData } from './Api/api';
+import { fetchSiteData } from './Api/api';
+//import axios from "axios";
+
 
 
 
@@ -28,7 +29,8 @@ export default function BootAppBar() {
   const [aboutData, setAboutData] = useState([]);
   const [activityData, setActivityData] = useState([]);
   const [noticeData, setNoticeData] = useState([]);
-  const [galleryData, setGalleryData] = useState([]);
+  const [siteData, setSiteData] = useState([]);
+
 
   useEffect(() => {
     fetchAboutData()
@@ -67,19 +69,22 @@ export default function BootAppBar() {
     photo: item.photo,
   }));
 
+
+
   useEffect(() => {
-    fetchGalleryData()
-      .then((data) => setGalleryData(data))
+
+    fetchSiteData()
+      .then((data) => setSiteData(data))
       .catch((error) => console.error(error));
   }, []);
+  //console.log(siteData);
 
-  // const mappedData3 = galleryData?.map((item) => ({
-  //   label: item.title,
-  //   path: `/media/${item.slug}`,
-  //   photo: item.cover_photo,
-  // }));
 
-  // console.log(mappedData3);
+  // useState(() => {
+  //   axios.get("https://bhalchandraschool.edu.np/api/siteSetting")
+  //     .then((response) => console.log("response", response));
+  // }, []);
+
 
 
 
@@ -110,9 +115,11 @@ export default function BootAppBar() {
     },
 
     {
-      label: "MEDIA", path: '/media',
+      label: "MEDIA",
 
-      children: [],
+      children: [
+        { label: "Gallery", path: '/media' },
+        { label: "Web", path: '/web' },],
     },
 
 
@@ -124,13 +131,13 @@ export default function BootAppBar() {
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleMenuToggle = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  // const handleMenuToggle = () => {
+  //   setIsMobileMenuOpen(!isMobileMenuOpen);
+  // };
 
   const handleClick = (event, index) => {
     setActiveMenu(activeMenu === index ? null : index);
@@ -166,27 +173,69 @@ export default function BootAppBar() {
     const isActive = activeIcon === iconName;
     const showName = isActive && activeIcon !== null;
 
-    let iconColor = '#ffffff';
+    let iconColor = 'darkblue';
     let hoverColor = '';
 
     switch (iconName) {
       case 'facebook':
-        iconColor = '';
         hoverColor = 'darkblue';
         break;
       case 'twitter':
-        iconColor = '';
         hoverColor = 'blue';
         break;
       case 'youtube':
-        iconColor = '';
         hoverColor = 'red';
         break;
       default:
         break;
     }
 
+    const handleMouseEnter = () => {
+      setActiveIcon(iconName);
+    };
+
+    const handleMouseLeave = () => {
+      setActiveIcon(null);
+    };
+
+    if (url) {
+      return (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <Box
+            key={iconName}
+            display="flex"
+            alignItems="center"
+            p={1}
+            borderRight={isLastIcon ? 'none' : '1px solid white'}
+            cursor="pointer"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              backgroundColor: isActive ? hoverColor : iconColor,
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            <SocialIcon
+              url={url}
+              style={{ height: 30, width: 30, marginRight: '5px' }}
+              bgColor='#ffffff'
+            />
+            {!isMobile && showName && (
+              <Typography variant="h9" color="inherit" component="div">
+                {iconName}
+              </Typography>
+            )}
+          </Box>
+        </a>
+      );
+    }
+
+
+
+
+
     return (
+
       <Box
         key={iconName}
         display="flex"
@@ -197,7 +246,7 @@ export default function BootAppBar() {
         onMouseEnter={() => handleIconMouseEnter(iconName)}
         onMouseLeave={handleIconMouseLeave}
         style={{
-          backgroundColor: isActive ? hoverColor : iconColor,
+          backgroundColor: hoverColor,
           transition: 'background-color 0.3s ease',
         }}
       >
@@ -214,6 +263,26 @@ export default function BootAppBar() {
       </Box>
     );
   };
+
+
+
+  // Render the icons based on the siteData
+  const renderIcons = () => {
+    if (!siteData) {
+      return null;
+    }
+
+    const icons = ['facebook', 'twitter', 'youtube'];
+    const lastIconIndex = icons.length - 1;
+
+    return icons.map((iconName, index) => (
+      <React.Fragment key={iconName}>
+        {renderIcon(iconName, siteData[`${iconName}_link`], index === lastIconIndex)}
+      </React.Fragment>
+    ));
+  };
+
+
 
   const renderMenuItems = (items) => {
     return items.map((item, index) => {
@@ -247,6 +316,7 @@ export default function BootAppBar() {
             >
               {renderMenuItems(item.children)}
             </Menu>
+
           </React.Fragment>
         );
       } else {
@@ -267,6 +337,7 @@ export default function BootAppBar() {
 
 
 
+
   return (
     <>
       <div
@@ -283,10 +354,9 @@ export default function BootAppBar() {
           zIndex: 9999,
         }}
       >
+
         <Box display="flex" alignItems="center">
-          {renderIcon('facebook', 'https://facebook.com/jaketrent')}
-          {renderIcon('twitter', 'https://twitter.com/jaketrent')}
-          {renderIcon('youtube', 'https://youtube.com/jaketrent', true)}
+          {renderIcons()}
         </Box>
         <Box display="flex" alignItems="center">
           <div
@@ -300,7 +370,8 @@ export default function BootAppBar() {
           >
             <AddIcCallIcon />
             <Typography variant="body2" color="inherit" component="div">
-              9851237436
+              {siteData?.phone}
+
             </Typography>
           </div>
           <div
@@ -314,20 +385,14 @@ export default function BootAppBar() {
           >
             <MailIcon />
             <Typography variant="body2" color="inherit" component="div">
-              bhalchandraschool17@gmail.com
-            </Typography>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <AccessTimeIcon />
-            <Typography variant="body2" color="inherit" component="div">
-              24 hours
+              {siteData?.email}
             </Typography>
           </div>
         </Box>
       </div>
+
       <nav
         className="navbar sticky-top navbar-expand-lg bg-body-tertiary"
-
         style={{
           marginTop: '-10px',
           display: 'flex',
@@ -366,14 +431,14 @@ export default function BootAppBar() {
           >
             <Link to="/home" style={{ textDecoration: 'none' }}>
               <img
-                src="/@assets/myimg/logo.png"
-                alt="Logo"
+                src={siteData?.logo}
+                alt=""
                 style={{
                   height: isMobile ? '90px' : '110px',
-
                 }}
               />
             </Link>
+
           </div>
 
           {!isMobile && (
@@ -411,7 +476,7 @@ export default function BootAppBar() {
                             horizontal: 'left',
                           }}
                         >
-                          {renderMenuItems(item.children)}
+                          {[renderMenuItems(item.children)]}
                         </Menu>
                       </li>
                     ) : (
@@ -437,8 +502,10 @@ export default function BootAppBar() {
           {isMobile && (
             <Box display="flex" justifyContent="center">
               <Button
-                aria-controls="simple-menu"
-                aria-haspopup="true"
+                data-target='#navbarToggleExternalContent'
+                aria-controls='navbarToggleExternalContent'
+                aria-expanded='false'
+                aria-label='Toggle navigation'
                 onClick={(event) => handleClick(event, null)}
               >
                 {activeMenu === null ? (
