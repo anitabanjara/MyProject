@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Route } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, MenuItem, Button, Menu
 
@@ -17,13 +17,10 @@ import { fetchAboutData } from "./Api/api";
 import { fetchActivityData } from './Api/api';
 import { fetchNoticeData } from './Api/api';
 import { fetchSiteData } from './Api/api';
+
 //import axios from "axios";
 
 
-
-
-
-const paddingBox = { px: { xs: 2, xl: 38 } };
 
 export default function BootAppBar() {
   const [aboutData, setAboutData] = useState([]);
@@ -119,7 +116,8 @@ export default function BootAppBar() {
 
       children: [
         { label: "Gallery", path: '/media' },
-        { label: "Web", path: '/web' },],
+        { label: "Web", path: '/web' },
+      ],
     },
 
 
@@ -128,16 +126,15 @@ export default function BootAppBar() {
   const [activeIcon, setActiveIcon] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // const handleMenuToggle = () => {
-  //   setIsMobileMenuOpen(!isMobileMenuOpen);
-  // };
+
 
   const handleClick = (event, index) => {
     setActiveMenu(activeMenu === index ? null : index);
@@ -276,9 +273,9 @@ export default function BootAppBar() {
     const lastIconIndex = icons.length - 1;
 
     return icons.map((iconName, index) => (
-      <React.Fragment key={iconName}>
+      <div key={iconName}>
         {renderIcon(iconName, siteData[`${iconName}_link`], index === lastIconIndex)}
-      </React.Fragment>
+      </div>
     ));
   };
 
@@ -288,7 +285,7 @@ export default function BootAppBar() {
     return items.map((item, index) => {
       if (item.children && item.children.length > 0) {
         return (
-          <React.Fragment key={index}>
+          <div key={index}>
             <MenuItem
               onClick={(event) => handleClick(event, index)}
               selected={activeMenu === index}
@@ -317,7 +314,7 @@ export default function BootAppBar() {
               {renderMenuItems(item.children)}
             </Menu>
 
-          </React.Fragment>
+          </div>
         );
       } else {
         return (
@@ -400,17 +397,17 @@ export default function BootAppBar() {
           height: '125px',
           overflow: isMobile ? 'hidden' : 'visible',
           width: '100%',
-          ...(!isMobile && { paddingRight: '0px' })
+          ...(isTablet && {
+            paddingRight: '0px', // Optional: Adjust the right padding for tablets
+          }),
         }}
       >
-
-
         <Box
           sx={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
             justifyContent: isMobile ? 'center' : 'space-between',
-            alignItems: 'flex-end',
+            alignItems: isMobile ? 'center' : 'flex-end', // Center items in mobile view
             padding: '20px',
             height: '125px',
             backgroundColor: 'lightblue',
@@ -418,12 +415,12 @@ export default function BootAppBar() {
           }}
           className="container-fluid menu-items"
         >
-
+          {/* Logo */}
           <div
             style={{
               position: 'sticky',
               top: 0,
-              marginRight: '20px',
+              marginRight: isMobile ? '10px' : '20px',
               display: 'flex',
               alignItems: 'center',
               height: '100%',
@@ -435,17 +432,18 @@ export default function BootAppBar() {
                 alt=""
                 style={{
                   height: isMobile ? '90px' : '110px',
+                  transition: 'height 0.3s ease',
                 }}
               />
             </Link>
-
           </div>
 
-          {!isMobile && (
-            <div>
+          {/* Navigation Items */}
+          {isMobile ? ( // Render nav items below the logo for mobile view
+            <div style={{ marginTop: '10px' }}>
               <ul className="navbar-nav">
                 {navItems.map((item, index) => (
-                  <React.Fragment key={index}>
+                  <div key={index}>
                     {item.children && item.children.length > 0 ? (
                       <li className="nav-item">
                         <Button
@@ -494,7 +492,65 @@ export default function BootAppBar() {
                         </Link>
                       </li>
                     )}
-                  </React.Fragment>
+                  </div>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            // Render nav items beside the logo for tablet and desktop view
+            <div>
+              <ul className="navbar-nav">
+                {navItems.map((item, index) => (
+                  <div key={index}>
+                    {item.children && item.children.length > 0 ? (
+                      <li className="nav-item">
+                        <Button
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: '1.1rem',
+                            color: 'black',
+                          }}
+                          onClick={(event) => handleClick(event, index)}
+                          aria-expanded={activeMenu === index}
+                        >
+                          {item.label}
+                          <ArrowDropDownIcon />
+                        </Button>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={activeMenu === index}
+                          onClose={handleClose}
+                          MenuListProps={{
+                            'aria-labelledby': 'dropdown-menu',
+                          }}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                          }}
+                        >
+                          {[renderMenuItems(item.children)]}
+                        </Menu>
+                      </li>
+                    ) : (
+                      <li className="nav-item">
+                        <Link
+                          className="nav-link"
+                          to={item.path}
+                          style={{
+                            fontWeight: 'bold',
+                            fontSize: '1.1rem',
+                            color: 'black',
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    )}
+                  </div>
                 ))}
               </ul>
             </div>
@@ -502,17 +558,13 @@ export default function BootAppBar() {
           {isMobile && (
             <Box display="flex" justifyContent="center">
               <Button
-                data-target='#navbarToggleExternalContent'
-                aria-controls='navbarToggleExternalContent'
-                aria-expanded='false'
-                aria-label='Toggle navigation'
+                data-target="#navbarToggleExternalContent"
+                aria-controls="navbarToggleExternalContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
                 onClick={(event) => handleClick(event, null)}
               >
-                {activeMenu === null ? (
-                  <MenuIcon />
-                ) : (
-                  <CloseIcon />
-                )}
+                {activeMenu === null ? <MenuIcon /> : <CloseIcon />}
               </Button>
               <Menu
                 id="simple-menu"

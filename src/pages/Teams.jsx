@@ -1,34 +1,44 @@
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import React, { useState, useEffect } from 'react';
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-import { fetchTeamsData } from "../Api/api";
+import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { fetchTeamsData } from '../Api/api';
 
 export default function Teams() {
     const [teamData, setTeamData] = useState([]);
+    const filePath = 'https://bhalchandraschool.edu.np/images/teams'; // Define the file path here
 
     useEffect(() => {
         AOS.init();
         AOS.refresh();
 
+
         fetchTeamsData()
-            .then((data) => setTeamData(data ? [data] : []))
-            .catch((error) => console.error(error));
+            .then((response) => {
+                // console.log('API response:', response);
+                if (response && response.length > 0) {
+                    setTeamData(response[0][1]);
+                } else {
+                    setTeamData([]);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setTeamData([]);
+            });
 
     }, []);
 
-    console.log(teamData);
+    //console.log('Team data:', teamData); // Log the team data
 
     return (
         <>
             <Box sx={{ backgroundColor: '#E1F5FE', padding: '2rem' }}>
                 <Box sx={{ mt: 4 }}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#0000FF', borderBottom: '4px solid #0000FF', display: 'inline' }}>
-                        Teams
+                        Teachers Team
                     </Typography>
                     <br />
-
                     <br />
                 </Box>
                 <Card>
@@ -36,27 +46,16 @@ export default function Teams() {
                         {Array.isArray(teamData) && teamData.length > 0 ? (
                             teamData.map((member) => (
                                 <Grid item key={member.id} xs={12} sm={6} md={4}>
-                                    <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#0000FF', borderBottom: '4px solid #0000FF', display: 'inline', }}>
-                                        {member.committee_title}
-                                    </Typography>
                                     <Card sx={{ maxWidth: 345, m: 2, p: 1, transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                                         <div>
-                                            <CardMedia
-                                                component="img"
-                                                height="200"
-                                                image={member.photo}
-                                                alt=""
-                                            />
+                                            <CardMedia component="img" height="300" src={`${filePath}/${member.photo}`} alt="" />
                                             <CardContent>
-
-                                                <Typography gutterBottom variant="h5" component="div" color='text.primary'>
+                                                <Typography gutterBottom variant="h5" component="div" color="text.primary">
                                                     {member.name}
                                                 </Typography>
                                                 <Typography variant="body2" color="text.primary">
                                                     {member.post}
                                                 </Typography>
-
-
                                             </CardContent>
                                         </div>
                                     </Card>
@@ -67,7 +66,7 @@ export default function Teams() {
                         )}
                     </Grid>
                 </Card>
-            </Box >
+            </Box>
         </>
     );
 }

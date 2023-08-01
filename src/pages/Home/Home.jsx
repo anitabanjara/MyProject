@@ -30,7 +30,7 @@ export default function Home() {
     return carouselData.map((item) => (
       <div key={item.id}>
         <img src={item.photo} alt={item.title} className="carousel-image" />
-        <div className="image-overlay">
+        <div className="image-overlay" >
           <h1 className="image-text">{item.title}</h1>
         </div>
       </div>

@@ -160,7 +160,6 @@ export default function Abc() {
                     >
                         ACTIVITIES
                     </Typography>
-
                 </Box>
 
                 <br />
@@ -192,14 +191,19 @@ export default function Abc() {
                                     >
                                         <Card
                                             key={index}
-                                            sx={{ width: { xs: "95%", xl: "90%" }, marginBottom: 5 }}
+                                            sx={{
+                                                width: { xs: "95%", xl: "90%" },
+                                                marginBottom: 5,
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
                                         >
                                             <CardMedia
                                                 sx={{ height: { xl: 200, xs: 100 } }}
                                                 image={card.photo}
                                                 title={card.title}
                                             />
-                                            <CardContent>
+                                            <CardContent sx={{ flexGrow: 1 }}>
                                                 <Typography
                                                     gutterBottom
                                                     variant="h6"
@@ -208,6 +212,11 @@ export default function Abc() {
                                                         color: "black",
                                                         fontWeight: "bold",
                                                         marginTop: "0.5rem",
+                                                        // Limit the title to 2 lines and add ellipsis for overflow
+                                                        display: "-webkit-box",
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: "vertical",
+                                                        overflow: "hidden",
                                                     }}
                                                 >
                                                     {card.title}
@@ -218,8 +227,8 @@ export default function Abc() {
                                 </Link>
                             ))}
                     </Carousel>
-
                 </Box>
+
                 {!expanded && (
                     <Box sx={{ backgroundColor: 'lightgrey', padding: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
 

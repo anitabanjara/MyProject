@@ -87,13 +87,13 @@ export const fetchBlogData = async () => {
     }
 };
 
-export const fetchLinksData = async () => {
+export const fetchLinkData = async () => {
     try {
-        const response = await axios.get(`${API_URLS}links`);
-        const data = response.data.data;
-        return data;
+        const response = await fetch(`${API_URLS}links`);
+        const data = await response.json();
+        return data.data.Web;
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching links data:", error);
         return [];
     }
 };
@@ -108,17 +108,17 @@ export const fetchNoticeData = async () => {
         return [];
     }
 };
-
 export const fetchTeamsData = async () => {
     try {
         const response = await axios.get(`${API_URLS}team`);
+        // console.log('API response:', response.data); // Log the API response
         return response.data.data;
-
     } catch (error) {
         console.error(error);
         return [];
     }
 };
+
 
 export const fetchGalleryData = async () => {
     try {
@@ -132,6 +132,8 @@ export const fetchGalleryData = async () => {
 };
 
 
+
+
 export const fetchSiteData = async () => {
     try {
         const response = await axios.get(`${API_URLS}siteSetting`);
@@ -142,6 +144,8 @@ export const fetchSiteData = async () => {
         return [];
     }
 };
+
+
 
 
 

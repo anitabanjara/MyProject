@@ -5,14 +5,32 @@ import EmailIcon from "@mui/icons-material/Email";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { fetchLinksData } from "../Api/api";
+import { fetchLinkData } from "../Api/api";
+import { fetchSiteData } from '../Api/api';
 
 export default function Links() {
+
+    const [showAll, setShowAll] = useState(false);
     const [linksData, setLinksData] = useState([]);
+    const [siteData, setSiteData] = useState([]);
 
     useEffect(() => {
-        fetchLinksData()
+        fetchLinkData()
             .then((data) => setLinksData(data))
+            .catch((error) => console.error(error));
+    }, []);
+
+    const visibleLinks = showAll ? linksData : linksData.slice(0, 5);
+
+    const toggleShowAll = () => {
+        setShowAll(!showAll);
+    };
+
+
+    useEffect(() => {
+
+        fetchSiteData()
+            .then((data) => setSiteData(data))
             .catch((error) => console.error(error));
     }, []);
 
@@ -64,11 +82,12 @@ export default function Links() {
                         >
                             Important links
                         </Typography>
-                        {Array.isArray(linksData) && linksData.length > 0 ? (
-                            linksData.map((item) => (
+                        {Array.isArray(visibleLinks) && visibleLinks.length > 0 ? (
+                            visibleLinks.map((item) => (
                                 <Grid
                                     sx={{
                                         textAlign: { xs: "center", xl: "left" },
+                                        cursor: "pointer",
                                     }}
                                     key={item.title}
                                     style={{ marginTop: "8px" }}
@@ -76,12 +95,13 @@ export default function Links() {
                                     xs={12}
                                 >
                                     <a
-                                        href={item.link}
+                                        href={item.links}
                                         style={{ textDecoration: "none", color: "#ffffff" }}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        <Typography sx={{ fontSize: 14 }}>{item.title}</Typography>
+                                        <Typography sx={{ fontSize: 14 }} component="span">{item.title}</Typography>
+
                                     </a>
                                 </Grid>
                             ))
@@ -90,8 +110,16 @@ export default function Links() {
                                 {linksData.length === 0 ? "No links available." : "Loading..."}
                             </Typography>
                         )}
+                        {linksData.length > 5 && (
+                            <Typography
+                                variant="subtitle2"
+                                sx={{ cursor: "pointer", color: "#ffffff", mt: 2 }}
+                                onClick={toggleShowAll}
+                            >
+                                {showAll ? "Read less" : "...Read more"}
+                            </Typography>
+                        )}
                     </Grid>
-
                     <Grid item sx={{ mb: 3 }} xs={12} md={3} xl={3}>
                         <Typography
                             variant="h6"
@@ -177,7 +205,7 @@ export default function Links() {
                         <Link style={{ textDecoration: "none", color: "#ffffff" }}>
                             <Typography sx={{ fontSize: 14 }}>
                                 <LocalPhoneIcon sx={{ fontSize: 19 }} />
-                                9851237436
+                                {siteData?.phone}
                             </Typography>
                         </Link>
                         <Typography
@@ -194,7 +222,8 @@ export default function Links() {
                         <Link style={{ textDecoration: "none", color: "#ffffff" }}>
                             <Typography sx={{ fontSize: 14 }}>
                                 <EmailIcon sx={{ fontSize: 19 }} />
-                                bhalchandraschool17@gmail.com
+                                {siteData?.email}
+
                             </Typography>
                         </Link>
 

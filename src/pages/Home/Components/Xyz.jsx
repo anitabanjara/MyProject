@@ -7,18 +7,29 @@ import { fetchTeamsData } from "../../../Api/api";
 
 export default function Teams() {
     const [teamData, setTeamData] = useState([]);
+    const filePath = 'https://bhalchandraschool.edu.np/images/teams';
 
     useEffect(() => {
         AOS.init();
         AOS.refresh();
 
         fetchTeamsData()
-            .then((data) => setTeamData(data ? [data] : []))
-            .catch((error) => console.error(error));
+            .then((response) => {
+                //  console.log('API response:', response);
+                if (response && response.length > 0) {
+                    setTeamData(response[0][1]);
+                } else {
+                    setTeamData([]);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setTeamData([]);
+            });
 
     }, []);
 
-    //console.log(teamData);
+
 
     return (
         <>
@@ -31,41 +42,41 @@ export default function Teams() {
 
                     <br />
                 </Box>
-                <Card>
-                    <Grid container spacing={2}>
-                        {Array.isArray(teamData) && teamData.length > 0 ? (
-                            teamData.map((member) => (
-                                <Grid item key={member.id} xs={12} sm={6} md={4}>
 
-                                    <Card sx={{ maxWidth: 350, m: 2, p: 1, transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
-                                        <div>
-                                            <CardMedia
-                                                component="img"
-                                                height="250"
-                                                image={member.photo}
-                                                alt=""
+                <Grid container spacing={2}>
+                    {Array.isArray(teamData) && teamData.length > 0 ? (
+                        teamData.slice(0, 3).map((member) => (
+                            <Grid item key={member.id} xs={12} sm={6} md={4}>
 
-                                            />
-                                            <CardContent>
+                                <Card sx={{ maxWidth: 350, m: 2, p: 1, transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                                    <div data-aos="fade-right">
+                                        <CardMedia
+                                            component="img"
+                                            height="270"
+                                            image={`${filePath}/${member.photo}`}
+                                            alt=""
 
-                                                <Typography gutterBottom variant="h5" component="div" color='#3b4147'>
-                                                    {member.name}
-                                                </Typography>
-                                                <Typography variant="h5" color="text.secondary">
-                                                    {member.post}
-                                                </Typography>
+                                        />
+                                        <CardContent>
+
+                                            <Typography gutterBottom variant="h5" component="div" color='#3b4147'>
+                                                {member.name}
+                                            </Typography>
+                                            <Typography variant="h5" color="text.secondary">
+                                                {member.post}
+                                            </Typography>
 
 
-                                            </CardContent>
-                                        </div>
-                                    </Card>
-                                </Grid>
-                            ))
-                        ) : (
-                            <Typography variant="h5">No team data available</Typography>
-                        )}
-                    </Grid>
-                </Card>
+                                        </CardContent>
+                                    </div>
+                                </Card>
+                            </Grid>
+                        ))
+                    ) : (
+                        <Typography variant="h5">No team data available</Typography>
+                    )}
+                </Grid>
+
 
 
 

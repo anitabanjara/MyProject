@@ -7,6 +7,7 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home/Home";
 import Teams from './pages/Teams';
 import Media from "./pages/Media";
+import Web from "./pages/Web";
 import Activ from './pages/Activities/Activ';
 import Notice from "./pages/Notices/Notice";
 import Blog from "./pages/Blog";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/contact-us" element={<Contact />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/media" element={<Media />} />
+          <Route path="/web" element={< Web />} />
           <Route path="/activity/:id" element={<Activ />} />
           <Route path="/notice/:id" element={<Notice />} />
           <Route path="/blog" element={<Blog />} />
